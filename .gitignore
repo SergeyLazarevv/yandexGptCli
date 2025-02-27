@@ -1,0 +1,27 @@
+# PHP-specific ignores
+/vendor/
+/composer.phar
+**/.env*
+/phpunit.xml
+/phpunit.xml.dist
+/.phpstorm.meta.php
+
+# Ignoring IDE and editor specific files
+/.idea/
+/.vscode/
+/nbproject/
+/*.swp
+*~
+*.bak
+
+# Ignoring OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignoring sensitive files (e.g., API tokens, configuration files)
+prompt.json
+iamToken.txt
+
+# Ignoring cache and log files
+/cache/
+/logs/
