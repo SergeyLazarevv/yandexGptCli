@@ -2,6 +2,7 @@
 /vendor/
 /composer.phar
 **/.env*
+!.env.example
 /phpunit.xml
 /phpunit.xml.dist
 /.phpstorm.meta.php
