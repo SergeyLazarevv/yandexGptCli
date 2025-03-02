@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http;
+namespace App\Services;
 
-class HttpRequest
+class HttpService
 {
     /**
      * Отправка HTTP-запроса
@@ -20,12 +20,12 @@ class HttpRequest
         // Если это POST запрос, убедимся, что данные в формате JSON
         if ($method === 'POST' && $data !== null) {
             // Преобразуем данные в строку JSON
-            $data = json_encode($data);
+            $data = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         }
 
         // Настройки для GET запроса
         if ($method === 'GET' && !empty($data)) {
-            $url .= '?' . http_build_query($data); // Преобразуем массив данных в строку запроса
+            $url .= '?' . http_build_query($data);
         }
 
         // Настройки cURL
@@ -35,7 +35,7 @@ class HttpRequest
         // Если POST запрос, добавляем данные
         if ($method === 'POST') {
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data); // Здесь передаем строку JSON
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         }
 
         // Добавляем заголовки
@@ -54,6 +54,5 @@ class HttpRequest
         curl_close($ch);
 
         return $response;
-        //var_dump('ewsp ', $response)
     }
 }

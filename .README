@@ -1,0 +1,6 @@
+Регестрация в Яндекс - https://yandex.cloud/ru/docs/foundation-models/quickstart/yandexgpt
+
+
+Перед началом использования нужно 
+1) Создать .env с данными из .env.example
+2) установить YANDEX_OAUTH, YANDEX_CATALOG_ID в .env

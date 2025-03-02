@@ -7,7 +7,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use App\Interfaces\YandexCliInterface;
 use App\Validate\Validator;
 use App\DTOs\CommandDTO;
-use App\Http\HttpRequest;
+use App\Services\HttpService as Http;
+use App\Http\YandexGPTRequest;
 
 $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
@@ -21,7 +22,7 @@ class YandexCli implements YandexCliInterface
 
     public static function test(): void
     {
-        var_dump('is test method');
+        \var_dump('is test method');
     }
 
     public static function init()
@@ -32,7 +33,7 @@ class YandexCli implements YandexCliInterface
             ';
         }
 
-        $response = HttpRequest::sendRequest(
+        $response = Http::sendRequest(
             url: $_ENV['YANDEX_GET_TOKEN_URL'], 
             method: 'POST',
             headers: ['Content-Type: application/json'],
@@ -49,6 +50,21 @@ class YandexCli implements YandexCliInterface
         }
     }
 
+    public static function ask(string $question, ?string $context)
+    {
+
+        $token = file_get_contents('iamToken.txt');
+
+        $response = Http::sendRequest(
+            url: $_ENV['YANDEX_GPT_URL'], 
+            method: 'POST',
+            headers: ['Content-Type: application/json', 'Authorization: Bearer ' . $token],
+            data: (new YandexGPTRequest($question, $context))->toArray()
+        );
+
+        var_dump(json_decode($response, true));
+    }
+
     public static function info() :void
     {
         // var_dump(2222);
@@ -57,21 +73,11 @@ class YandexCli implements YandexCliInterface
         - init <your_outh_token>
         \n");
     }
-
-
-    // public static function validateMethods(): void
-    // {
-    //     $classMethods = get_class_methods(static::class);
-    //     foreach (AvailableMethods::cases() as $method) {
-    //         var_dump($method->value);
-    //         if (!in_array($method->value, $classMethods)) {
-    //             throw new RuntimeException("Ошибка: метод '{$method->value}' отсутствует в " . static::class . " \n");
-    //         }
-    //     }
-    // }
 }
 
 Validator::validate($argv);
 $dto = new CommandDTO($argv);
 
-YandexCli::{$dto->method->value}($dto->argument);
+// var_dump($dto->method->value, $dto->argument);
+
+YandexCli::{$dto->method->value}($dto->argument, null);
